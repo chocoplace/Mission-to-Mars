@@ -5,6 +5,8 @@ __pycache__/
 
 #Files
 Practice.ipynb
+scraping.py
+app.py
 
 # C extensions
 *.so
