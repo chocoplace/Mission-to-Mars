@@ -26,9 +26,10 @@ def scrape_all():
     return data
 
 def mars_news(browser):
-    
+
+    # Scrape Mars News
     # Visit the mars nasa news site
-    url = 'https://redplanetscience.com'
+    url = 'https://data-class-mars.s3.amazonaws.com/Mars/index.html'
     browser.visit(url)
 
     # Optional delay for loading the page
@@ -51,11 +52,10 @@ def mars_news(browser):
 
     return news_title, news_p
 
-# ## JPL Space Images Featured Image
 
 def featured_image(browser):
     # Visit URL
-    url = 'https://spaceimages-mars.com'
+    url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html'
     browser.visit(url)
 
     # Find and click the full image button
@@ -68,34 +68,34 @@ def featured_image(browser):
 
     # Add try/except for error handling
     try:
-        # find the relative image url
+        # Find the relative image url
         img_url_rel = img_soup.find('img', class_='fancybox-image').get('src')
 
     except AttributeError:
         return None
 
-    # Use the base URL to create an absolute URL
-    img_url = f'https://spaceimages-mars.com/{img_url_rel}'
+    # Use the base url to create an absolute url
+    img_url = f'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/{img_url_rel}'
 
     return img_url
-
-# ## Mars Facts
 
 def mars_facts():
     # Add try/except for error handling
     try:
-      # use 'read_html" to scrape the facts table into a dataframe
-      df = pd.read_html('https://galaxyfacts-mars.com')[0]
+        # Use 'read_html' to scrape the facts table into a dataframe
+        df = pd.read_html('https://data-class-mars-facts.s3.amazonaws.com/Mars_Facts/index.html')[0]
+
     except BaseException:
-      return None
+        return None
 
     # Assign columns and set index of dataframe
-    df.columns=['description', 'Mars', 'Earth']
-    df.set_index('description', inplace=True)
+    df.columns=['Description', 'Mars', 'Earth']
+    df.set_index('Description', inplace=True)
 
     # Convert dataframe into HTML format, add bootstrap
     return df.to_html(classes="table table-striped")
 
 if __name__ == "__main__":
+
     # If running as script, print scraped data
     print(scrape_all())
